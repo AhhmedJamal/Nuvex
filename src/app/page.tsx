@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-
-import { TvProps } from "@/interface/TvProps";
 import { MovieProps } from "@/interface/MovieProps";
 import { useEffect, useState } from "react";
-import CardMovie from "@/components/CardPopular";
-import CardTv from "@/components/CardTV";
+import CardPopular from "@/components/CardPopular";
 import MovieTrailer from "@/components/MovieTrailer";
 import { CardMovieProps } from "@/interface/CardMoviePrpos";
 export default function Home() {
-  const [tv, setTv] = useState([]);
   const [popular, setPopular] = useState([]);
+  const [popular2, setPopular2] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [mouseDown, setMouseDown] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>(0);
@@ -46,16 +43,6 @@ export default function Home() {
       .catch((err) => console.error(err));
   };
 
-  const getTv = () => {
-    fetch(
-      "https://api.themoviedb.org/3/tv/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&&language=en-Us&page=1"
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        setTv(response.results);
-      })
-      .catch((err) => console.error(err));
-  };
   const getPopular = () => {
     fetch(
       "https://api.themoviedb.org/3/movie/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&language=en-Us&page=2"
@@ -66,11 +53,21 @@ export default function Home() {
       })
       .catch((err) => console.error(err));
   };
+  const getPopular2 = () => {
+    fetch(
+      "https://api.themoviedb.org/3/movie/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&&language=en-Us&page=8"
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        setPopular2(response.results);
+      })
+      .catch((err) => console.error(err));
+  };
 
   useEffect(() => {
     getPopular();
+    getPopular2();
     getTopRated();
-    getTv();
   }, []);
 
   return (
@@ -88,7 +85,7 @@ export default function Home() {
           {popular.map((movie: CardMovieProps) => {
             return (
               <div key={movie.id}>
-                <CardMovie data={movie} />
+                <CardPopular data={movie} />
               </div>
             );
           })}
@@ -106,7 +103,7 @@ export default function Home() {
           {topRated.map((topRate: CardMovieProps) => {
             return (
               <div key={topRate.id}>
-                <CardMovie data={topRate} />
+                <CardPopular data={topRate} />
               </div>
             );
           })}
@@ -121,10 +118,10 @@ export default function Home() {
           onMouseMove={handleMouseMove}
           onMouseLeave={stopDragging}
         >
-          {tv.map((tv: TvProps) => {
+          {popular2.map((popular2: CardMovieProps) => {
             return (
-              <div key={tv.id}>
-                <CardTv data={tv} />
+              <div key={popular2.id}>
+                <CardPopular data={popular2} />
               </div>
             );
           })}

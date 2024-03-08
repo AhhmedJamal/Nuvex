@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 const pathPoster = (path: string) => {
   return `https://image.tmdb.org/t/p/original${path}`;
 };
-function CardMovie({ data }: CardMoviePropsD) {
+function CardPopular({ data }: CardMoviePropsD) {
   const router = useRouter();
   return (
     <button
       onClick={() => {
-        router.push(`/movie/${data.id}-${data.title.replace(/[\s#-]/g, "_")}`);
+        router.push(`/movie/${data.id}-${data?.title.replace(/[\s#-]/g, "_")}`);
       }}
       className="w-[120px] relative flex flex-col justify-center items-center border border-zinc-600 "
     >
@@ -24,4 +24,4 @@ function CardMovie({ data }: CardMoviePropsD) {
   );
 }
 
-export default CardMovie;
+export default CardPopular;

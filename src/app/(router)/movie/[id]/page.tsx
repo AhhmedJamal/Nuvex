@@ -6,8 +6,8 @@ import { MovieProps } from "@/interface/MovieProps";
 import { PiDownloadSimpleBold } from "react-icons/pi";
 import { FaPlay } from "react-icons/fa";
 import { CardMovieProps } from "@/interface/CardMoviePrpos";
-import CardMovie from "@/components/CardPopular";
-
+import CardPopular from "@/components/CardPopular";
+import { IoCloseCircleSharp } from "react-icons/io5";
 function MovieDetails() {
   const params = useParams();
   const [movieVideo, setMovieVideo] = useState<MovieProps | null>(null);
@@ -15,13 +15,35 @@ function MovieDetails() {
   const number = params.id as string;
   const numberPart = number.match(/\d+/);
   const numericValue = parseInt(numberPart?.[0] ?? "", 10);
+  const [mouseDown, setMouseDown] = useState<boolean>(false);
+  const [startX, setStartX] = useState<number>(0);
+  const [scrollLeft, setScrollLeft] = useState<number>(0);
+  const [show, setShow] = useState<boolean>(false);
 
+  const startDragging = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setMouseDown(true);
+    setStartX(e.pageX - (e.currentTarget.offsetLeft || 0));
+    setScrollLeft(e.currentTarget.scrollLeft || 0);
+  };
+
+  const stopDragging = () => {
+    setMouseDown(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.preventDefault();
+    if (!mouseDown) return;
+    const x = e.pageX - (e.currentTarget.offsetLeft || 0);
+    const scroll = x - startX;
+    if (e.currentTarget) {
+      e.currentTarget.scrollLeft = scrollLeft - scroll;
+    }
+  };
   let date: Date;
   if (movieVideo?.release_date) {
     date = new Date(movieVideo?.release_date);
   } else {
-    // Handle the case where dateString is undefined
-    date = new Date(); // Default to current date
+    date = new Date();
   }
 
   const formattedDate = date.toLocaleString("en-US", {
@@ -52,27 +74,42 @@ function MovieDetails() {
   const pathPhoto = (path: string | null | undefined) => {
     return `https://image.tmdb.org/t/p/original${path}`;
   };
-
+  const handleClick = () => {
+    setShow((pre) => !pre);
+  };
   useEffect(() => {
     getPopular();
     fetchDataVideo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="w-full mb-[60px]">
+    <div className="w-full mb-[60px] h-screen overflow-hidden ">
       <div className="relative ">
         <img
           src={pathPhoto(movieVideo?.backdrop_path)}
           alt="backdrop_path"
           className="w-full object-cover"
         />
-        <div className="absolute top-0 flex pl-2 items-center  bg-gradient-to-r from-[#1c1c1c] w-full h-full">
+        <div className="absolute top-0 flex pl-2 items-center  bg-gradient-to-r from-[#1c1c1c] w-full h-[100%]">
           <img
             src={pathPhoto(movieVideo?.poster_path)}
             alt="poster_path"
             className="w-[30%] rounded-lg "
           />
         </div>
+
+        {show && (
+          <div className="fixed top-0 z-10 w-full h-screen  bg-[rgba(33,_33,_33,_0.8)]">
+            <div className="p-5 w-full flex justify-end">
+              <IoCloseCircleSharp size={45} onClick={handleClick} />
+            </div>
+            <iframe
+              src={`https://www.youtube.com/embed/${movieVideo?.videos.results[0].key}`}
+              className={`w-[90%] md:h-[400px] sm:mt-[70px] md:mt-[100px] lg:mt-0 mt-[30px] h-[300px] m-auto`}
+              allowFullScreen={true}
+            />
+          </div>
+        )}
       </div>
       <div className="p-2">
         <div className="flex justify-between ">
@@ -80,7 +117,11 @@ function MovieDetails() {
             <PiDownloadSimpleBold size={20} />
             Download
           </button>
-          <button className="bg-sky-500 active:bg-sky-300 transition-all w-[48%] flex justify-center items-center gap-1 py-1 rounded-md text-[13px] font-bold">
+
+          <button
+            onClick={handleClick}
+            className="bg-sky-500 active:bg-sky-300 transition-all w-[48%] flex justify-center items-center gap-1 py-1 rounded-md text-[13px] font-bold"
+          >
             <FaPlay size={17} />
             Play
           </button>
@@ -104,12 +145,19 @@ function MovieDetails() {
           </div>
         </div>
       </div>
-      <div className="bg-zinc-700 w-full h-[1px] mt-1"></div>
-      <div className="grid grid-cols-3 mt-2  place-items-center">
+      <div className="bg-zinc-700 w-full h-[1px] my-3"></div>
+      <h1 className="text-[14px] font-bold mb-2 pl-3">More Like This</h1>
+      <div
+        className="flex overflow-auto gap-3 containerMovies px-3"
+        onMouseDown={startDragging}
+        onMouseUp={stopDragging}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={stopDragging}
+      >
         {popular.map((movie: CardMovieProps) => {
           return (
             <div key={movie.id} className="">
-              <CardMovie data={movie} />
+              <CardPopular data={movie} />
             </div>
           );
         })}
@@ -119,22 +167,3 @@ function MovieDetails() {
 }
 
 export default MovieDetails;
-
-/* <iframe
-        src={`https://www.youtube.com/embed/${movie?.key}`}
-        className="w-full h-[400px]"
-        allowFullScreen={true}
-
-          {
-      "iso_639_1": "en",
-      "iso_3166_1": "US",
-      "name": "Keg Stand",
-      "key": "VQ2XpnUvksw",
-      "site": "YouTube",
-      "size": 1080,
-      "type": "Clip",
-      "official": true,
-      "published_at": "2024-01-08T22:18:53.000Z",
-      "id": "659f584a93828e0125f3678e"
-    },
-      /> */

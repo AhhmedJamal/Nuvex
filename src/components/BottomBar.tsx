@@ -11,7 +11,7 @@ function BottomBar() {
   const router = useParams();
 
   return (
-    <div className="fixed w-full h-[60px] bg-[#1c1c1c] bottom-[-1px] flex justify-around items-center [box-shadow:0px_-1px_10px_0px_rgba(22,_22,_22,_1)] border-t border-zinc-800">
+    <div className=" sm:hidden z-10 fixed w-full h-[60px] bg-[#1c1c1c] bottom-[-1px] flex justify-around items-center [box-shadow:0px_-1px_10px_0px_rgba(22,_22,_22,_1)] border-t border-zinc-800">
       <Link href={"/"} className={pathname === "/" ? "text-sky-500" : ""}>
         <GoHomeFill size={30} />
       </Link>
