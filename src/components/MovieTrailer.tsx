@@ -8,6 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useEffect, useState } from "react";
 import { MovieProps } from "@/interface/MovieProps";
+import { CardMovieProps } from "@/interface/CardMoviePrpos";
 function MovieTrailer() {
   const [upComing, setUpComing] = useState([]);
 
@@ -38,7 +39,7 @@ function MovieTrailer() {
         showStatus={false}
         interval={3000}
       >
-        {upComing.map((data: MovieProps) => {
+        {upComing.map((data: CardMovieProps) => {
           return (
             <div key={data.id} className="relative">
               <img

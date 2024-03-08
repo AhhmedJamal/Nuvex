@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import Card from "@/components/CardTV";
-import { TvShowProps } from "@/interface/TvProps";
+
+import { TvProps } from "@/interface/TvProps";
 import { MovieProps } from "@/interface/MovieProps";
 import { useEffect, useState } from "react";
-import CardMovie from "@/components/CardMovie";
+import CardMovie from "@/components/CardPopular";
 import CardTv from "@/components/CardTV";
 import MovieTrailer from "@/components/MovieTrailer";
+import { CardMovieProps } from "@/interface/CardMoviePrpos";
 export default function Home() {
   const [tv, setTv] = useState([]);
-  const [movies, setMovies] = useState([]);
+  const [popular, setPopular] = useState([]);
   const [topRated, setTopRated] = useState([]);
-
   const [mouseDown, setMouseDown] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>(0);
   const [scrollLeft, setScrollLeft] = useState<number>(0);
@@ -56,19 +56,19 @@ export default function Home() {
       })
       .catch((err) => console.error(err));
   };
-  const getMovies = () => {
+  const getPopular = () => {
     fetch(
       "https://api.themoviedb.org/3/movie/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&language=en-Us&page=2"
     )
       .then((response) => response.json())
       .then((response) => {
-        setMovies(response.results);
+        setPopular(response.results);
       })
       .catch((err) => console.error(err));
   };
 
   useEffect(() => {
-    getMovies();
+    getPopular();
     getTopRated();
     getTv();
   }, []);
@@ -85,7 +85,7 @@ export default function Home() {
           onMouseMove={handleMouseMove}
           onMouseLeave={stopDragging}
         >
-          {movies.map((movie: MovieProps) => {
+          {popular.map((movie: CardMovieProps) => {
             return (
               <div key={movie.id}>
                 <CardMovie data={movie} />
@@ -103,7 +103,7 @@ export default function Home() {
           onMouseMove={handleMouseMove}
           onMouseLeave={stopDragging}
         >
-          {topRated.map((topRate: MovieProps) => {
+          {topRated.map((topRate: CardMovieProps) => {
             return (
               <div key={topRate.id}>
                 <CardMovie data={topRate} />
@@ -121,7 +121,7 @@ export default function Home() {
           onMouseMove={handleMouseMove}
           onMouseLeave={stopDragging}
         >
-          {tv.map((tv: TvShowProps) => {
+          {tv.map((tv: TvProps) => {
             return (
               <div key={tv.id}>
                 <CardTv data={tv} />

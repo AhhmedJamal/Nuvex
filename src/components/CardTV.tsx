@@ -1,11 +1,10 @@
-import { CardTv } from "@/interface/CardProps";
-import { TvShowProps } from "@/interface/TvProps";
+import { TvPropsD } from "@/interface/MargeInterFace";
 import Image from "next/image";
 
 const pathPoster = (path: string) => {
   return `https://image.tmdb.org/t/p/original${path}`;
 };
-function CardTv({ data }: CardTv) {
+function CardTv({ data }: TvPropsD) {
   return (
     <div className="w-[120px] relative flex flex-col justify-center items-center border border-zinc-600 ">
       <Image

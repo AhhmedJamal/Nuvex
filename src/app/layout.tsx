@@ -18,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning={true}>
+      <body
+        suppressHydrationWarning={true}
+        className="bg-[#1c1c1c] text-[white] font-['Ubuntu',_sans-serif] font-normal not-italic"
+      >
         <NavBar />
         <div className="h-[90vh] overflow-y-scroll">{children}</div>
         <BottomBar />
