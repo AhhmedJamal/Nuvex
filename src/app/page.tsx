@@ -11,6 +11,8 @@ import MovieTrailer from "@/components/MovieTrailer";
 export default function Home() {
   const [tv, setTv] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [topRated, setTopRated] = useState([]);
+
   const [mouseDown, setMouseDown] = useState<boolean>(false);
   const [startX, setStartX] = useState<number>(0);
   const [scrollLeft, setScrollLeft] = useState<number>(0);
@@ -34,6 +36,17 @@ export default function Home() {
       e.currentTarget.scrollLeft = scrollLeft - scroll;
     }
   };
+  const getTopRated = () => {
+    fetch(
+      "https://api.themoviedb.org/3/movie/top_rated?api_key=b9fcb57ad4b325613192f31c8cd77d8c&language=en-Us&page=1"
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        setTopRated(response.results);
+      })
+      .catch((err) => console.error(err));
+  };
+
   const getTv = () => {
     fetch(
       "https://api.themoviedb.org/3/tv/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&&language=en-Us&page=1"
@@ -46,7 +59,7 @@ export default function Home() {
   };
   const getMovies = () => {
     fetch(
-      "https://api.themoviedb.org/3/movie/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&language=en-Us&page=1"
+      "https://api.themoviedb.org/3/movie/popular?api_key=b9fcb57ad4b325613192f31c8cd77d8c&language=en-Us&page=2"
     )
       .then((response) => response.json())
       .then((response) => {
@@ -56,18 +69,20 @@ export default function Home() {
   };
 
   useEffect(() => {
-    getTv();
     getMovies();
+    getTopRated();
+    getTv();
   }, []);
 
   return (
     <main>
       <NavBar />
-      <MovieTrailer/>
-      <div className="p-5">
+      <MovieTrailer />
+
+      <div className="p-2 ">
         <h1 className="text-[18px] font-bold mb-2">Popular on Nuvex</h1>
         <div
-          className="flex overflow-auto gap-3 "
+          className="flex overflow-auto gap-3 containerMovies"
           onMouseDown={startDragging}
           onMouseUp={stopDragging}
           onMouseMove={handleMouseMove}
@@ -82,10 +97,28 @@ export default function Home() {
           })}
         </div>
       </div>
-      <div className="p-5">
+      <div className="p-2">
+        <h1 className="text-[18px] font-bold mb-2">Top Rated</h1>
+        <div
+          className="flex overflow-auto gap-3 containerMovies"
+          onMouseDown={startDragging}
+          onMouseUp={stopDragging}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={stopDragging}
+        >
+          {topRated.map((topRate: MovieProps) => {
+            return (
+              <div key={topRate.id}>
+                <CardMovie data={topRate} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="p-2 ">
         <h1 className="text-[18px] font-bold mb-2">TV Dramas</h1>
         <div
-          className="flex overflow-auto gap-3 "
+          className="flex overflow-auto gap-3 containerMovies"
           onMouseDown={startDragging}
           onMouseUp={stopDragging}
           onMouseMove={handleMouseMove}

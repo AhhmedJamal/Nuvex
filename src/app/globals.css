@@ -1,16 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Mitr:wght@200;300;400;500;600;700&family=Righteous&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Madimi+One&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
-  padding: 0;
-  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  padding: 0;
+  margin: 0;
 }
 *::selection {
   background-color: #b70020;
@@ -29,3 +31,6 @@ body {
   font-style: normal;
 }
 
+.containerMovies {
+  cursor: grab;
+}
