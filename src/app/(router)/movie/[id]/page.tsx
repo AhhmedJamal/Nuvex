@@ -15,7 +15,15 @@ function MovieDetails() {
   const number = params.id as string;
   const numberPart = number.match(/\d+/);
   const numericValue = parseInt(numberPart?.[0] ?? "", 10);
-  const date = new Date(movieVideo?.release_date);
+
+  let date: Date;
+  if (movieVideo?.release_date) {
+    date = new Date(movieVideo?.release_date);
+  } else {
+    // Handle the case where dateString is undefined
+    date = new Date(); // Default to current date
+  }
+
   const formattedDate = date.toLocaleString("en-US", {
     year: "numeric",
     month: "numeric",
