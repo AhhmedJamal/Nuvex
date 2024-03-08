@@ -49,7 +49,7 @@ function MovieDetails() {
       })
       .catch((err) => console.error(err));
   };
-  const pathPhoto = (path: string) => {
+  const pathPhoto = (path: string | null | undefined) => {
     return `https://image.tmdb.org/t/p/original${path}`;
   };
 
