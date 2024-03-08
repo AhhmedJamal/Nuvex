@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import NavBar from "@/components/NavBar";
+import BottomBar from "@/components/BottomBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning={true}>{children}</body>
+      <body suppressHydrationWarning={true}>
+        <NavBar />
+        <div className="h-[90vh] overflow-y-scroll">{children}</div>
+        <BottomBar />
+      </body>
     </html>
   );
 }

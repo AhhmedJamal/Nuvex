@@ -6,7 +6,6 @@ import { MovieProps } from "@/interface/MovieProps";
 import { useEffect, useState } from "react";
 import CardMovie from "@/components/CardMovie";
 import CardTv from "@/components/CardTV";
-import NavBar from "@/components/NavBar";
 import MovieTrailer from "@/components/MovieTrailer";
 export default function Home() {
   const [tv, setTv] = useState([]);
@@ -75,10 +74,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main>
-      <NavBar />
+    <main className="mb-[60px]">
       <MovieTrailer />
-
       <div className="p-2 ">
         <h1 className="text-[18px] font-bold mb-2">Popular on Nuvex</h1>
         <div

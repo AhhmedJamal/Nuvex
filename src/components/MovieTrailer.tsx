@@ -28,7 +28,7 @@ function MovieTrailer() {
     getUpcoming();
   }, []);
   return (
-    <div className=" h-[280px]  w-full  sm:mb-[60px] px-3 mb-[25px] mt-2">
+    <div className=" h-[280px]  w-full  sm:mb-[60px] px-3 mb-[25px] ">
       <h1 className="text-[18px] font-bold mb-2">Upcoming</h1>
       <Carousel
         autoPlay={true}
