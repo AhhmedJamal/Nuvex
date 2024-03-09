@@ -8,7 +8,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import { useEffect, useState } from "react";
 import { MovieProps } from "@/interface/MovieProps";
-import { CardMovieProps } from "@/interface/CardMoviePrpos";
+import { CardMovieProps } from "@/interface/CardMovieProps";
 function MovieTrailer() {
   const [upComing, setUpComing] = useState([]);
 

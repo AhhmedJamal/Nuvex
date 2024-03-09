@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { MovieProps } from "@/interface/MovieProps";
 import { PiDownloadSimpleBold } from "react-icons/pi";
 import { FaPlay } from "react-icons/fa";
-import { CardMovieProps } from "@/interface/CardMoviePrpos";
+import { CardMovieProps } from "@/interface/CardMovieProps";
 import CardPopular from "@/components/CardPopular";
 import { IoCloseCircleSharp } from "react-icons/io5";
 function MovieDetails() {

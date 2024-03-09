@@ -15,7 +15,7 @@
   margin: 0;
 }
 *::selection {
-  background-color: #b70020;
+  background-color: #0ea5e9;
   color: black;
 }
 *::-webkit-scrollbar {
