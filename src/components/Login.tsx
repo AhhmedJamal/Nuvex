@@ -11,7 +11,8 @@ import Link from "next/link";
 import { addDoc, collection } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import { UserData } from "@/interface/UserProps";
+
+import { UserCredential, User } from "firebase/auth";
 function Login() {
   const [email, setEmail] = useState<string>("");
   const [pass, setPass] = useState<string>("");
@@ -47,8 +48,9 @@ function Login() {
   const handleGoogle = () => {
     const googleProvider = new GoogleAuthProvider();
     signInWithPopup(auth, googleProvider)
-      .then(async ({ user }) => {
-        await fetchSignInMethodsForEmail(auth, user.email)
+      .then(async (result: UserCredential) => {
+        const user = result.user;
+        await fetchSignInMethodsForEmail(auth, user?.email)
           .then(async (signInMethods) => {
             if (signInMethods.length > 0) {
               console.log(signInMethods);
@@ -80,30 +82,38 @@ function Login() {
 
   const handleFacebook = async () => {
     try {
-      const result = await signInWithPopup(auth, facebookProvider);
-      const user: UserData = result.user;
-      try {
-        const signInMethods = await fetchSignInMethodsForEmail(
-          auth,
-          user.email
-        );
+      const result: UserCredential = await signInWithPopup(
+        auth,
+        facebookProvider
+      );
+      const user: User | null = result.user;
 
-        if (!signInMethods) {
-          try {
-            await addDoc(collection(db, "users"), {
-              id: user.uid,
-              name: user.displayName,
-              email: user.email,
-              photoURL: user.photoURL,
-              download: [],
-            });
-            console.log("Document added successfully");
-          } catch (e) {
-            console.error("Error adding document: ", e);
+      if (user) {
+        try {
+          const signInMethods = await fetchSignInMethodsForEmail(
+            auth,
+            user.email
+          );
+
+          if (!signInMethods) {
+            try {
+              await addDoc(collection(db, "users"), {
+                id: user.uid,
+                name: user.displayName || "", // Use optional chaining to handle possible null values
+                email: user.email || "", // Use optional chaining to handle possible null values
+                photoURL: user.photoURL || "", // Use optional chaining to handle possible null values
+                download: [],
+              });
+              console.log("Document added successfully");
+            } catch (e) {
+              console.error("Error adding document: ", e);
+            }
           }
+        } catch (error) {
+          console.error(error);
         }
-      } catch (error) {
-        console.error(error);
+      } else {
+        console.error("User not found");
       }
     } catch (error: any) {
       console.error(error.message);
